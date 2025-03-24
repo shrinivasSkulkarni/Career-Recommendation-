@@ -1,0 +1,14 @@
+# Backend Dependencies
+Flask==2.3.2
+Flask-SQLAlchemy==3.0.5
+pandas==2.0.3
+scikit-learn==1.3.0
+transformers==4.30.2
+numpy==1.24.3
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Frontend Dependencies
+streamlit==1.26.
+
+
