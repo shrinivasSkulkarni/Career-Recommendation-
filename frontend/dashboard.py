@@ -6,7 +6,7 @@ st.title("CareerPath AI – Interactive Dashboard")
 
 # Sidebar for Navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "Career Recommendations", "Job Market Trends", "Roadmap to Success", "Resume Optimization"])
+page = st.sidebar.radio("Go to", ["Home", "Career Recommendations", "Job Market Trends", "Roadmap to Success", "Resume Optimization", "Career Copilot"])
 
 # Backend API URL
 BACKEND_URL = "http://127.0.0.1:5000"
@@ -134,3 +134,23 @@ elif page == "Resume Optimization":
                 st.error("The request timed out. Try again later.")
         else:
             st.warning("Please paste your resume text.")
+
+# Career Copilot Page (RAG)
+elif page == "Career Copilot":
+    st.header("Career Copilot")
+    st.write("Ask questions about your resume and get answers with sources.")
+
+    q = st.text_input("Ask about your resume or a job description")
+
+    if st.button("Ask") and q:
+        try:
+            with st.spinner("Thinking..."):
+                r = requests.post("http://127.0.0.1:8000/ask", json={"question": q}, timeout=60)
+                r.raise_for_status()
+                res = r.json()
+            st.write(res["answer"])
+            with st.expander("Sources"):
+                for s in res["sources"]:
+                    st.caption(s["text"])
+        except Exception as e:
+            st.error(f"Copilot service not reachable: {e}")
