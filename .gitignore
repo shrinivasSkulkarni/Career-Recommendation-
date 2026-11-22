@@ -1,0 +1,10 @@
+.env
+.venv/
+chroma_db/
+mlruns/
+__pycache__/
+*.pyc
+rag_service/eval/sample_resume.pdf
+rag_service/mlflow.db
+rag_service/eval/.answers_cache.json
+.vscode/

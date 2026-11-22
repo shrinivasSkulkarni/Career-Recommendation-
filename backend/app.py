@@ -7,7 +7,19 @@ from nlp_utils import ResumeOptimizer
 from config import DATASET_PATH, JOB_MARKET_PATH
 from models import db
 import os
+import requests
 
+RAG_URL = os.getenv("RAG_URL", "http://127.0.0.1:8000")
+
+def index_resume(resume_text):
+    try:
+        requests.post(
+            f"{RAG_URL}/ingest-text",
+            json={"text": resume_text, "doc_type": "resume"},
+            timeout=60,
+        )
+    except Exception as e:
+        print(f"RAG indexing skipped: {e}")
 app = Flask(__name__)
 CORS(app)
 
@@ -91,6 +103,7 @@ def optimize_resume():
         resume_text = data.get('resume_text', '').strip()
         if not resume_text:
             return jsonify({"error": "Resume text is required"}), 400
+        index_resume(resume_text)
         optimized_text = resume_optimizer.optimize(resume_text)
         return jsonify({"optimized_resume": optimized_text})
     except Exception as e:

@@ -35,3 +35,22 @@ if st.button("Get Recommendations"):
             st.error("The request timed out. Try again later.")
     else:
         st.warning("Please fill in all fields.")
+
+st.divider()
+st.subheader("Career Copilot")
+st.write("Ask questions about your resume and get answers with sources.")
+
+copilot_q = st.text_input("Ask about your resume or a job description", key="copilot_q")
+
+if st.button("Ask Copilot", key="copilot_btn") and copilot_q:
+    try:
+        with st.spinner("Thinking..."):
+            r = requests.post("http://127.0.0.1:8000/ask", json={"question": copilot_q}, timeout=60)
+            r.raise_for_status()
+            res = r.json()
+        st.write(res["answer"])
+        with st.expander("Sources"):
+            for s in res["sources"]:
+                st.caption(s["text"])
+    except Exception as e:
+        st.error(f"Copilot service not reachable: {e}")
