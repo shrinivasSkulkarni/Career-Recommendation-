@@ -61,7 +61,7 @@ Create `rag_service/.env` (never commit this file):
 
 ```
 GOOGLE_API_KEY=your_key_here
-LLM_MODEL=gemini-3.8-flash
+LLM_MODEL=gemini-3.1-flash-lite
 CHUNK_SIZE=500
 CHUNK_OVERLAP=83
 TOP_K=4
@@ -104,6 +104,10 @@ The retrieval settings were compared on **61 test questions** about one resume. 
 | 800 (9) | 70.5 | 85.2 | 90.2 | 91.8 |
 | 1200 (6) | 62.3 | 80.3 | 95.1 | 95.1 |
 
+![MLflow parallel coordinates plot of 16 retrieval runs](docs/mlflow_comparison.png)
+
+Each line is one run. Warmer colours mean a higher retrieval hit rate; the best runs use top_k 4 or 6.
+
 What the results show:
 
 - **`k` matters most.** Going from k=1 to k=4 adds 25 to 40 points. From k=4 to k=6 it adds 0 to 3.
@@ -114,7 +118,9 @@ What the results show:
 
 | Setting | Questions | Answer accuracy |
 |---|---|---|
-| chunk 500, k=4 | first 15 of 61 | _to be filled after the run_ |
+| chunk 500, k=4 (gemini-3.1-flash-lite) | first 15 of 61 | 100% (15/15) |
+
+These 15 questions are easier than the full set (retrieval hit rate was 100% on them versus 90.2% across all 61), so 15/15 is a check that the pipeline works end to end, not a general accuracy figure.
 
 Run it with:
 
